@@ -1,6 +1,11 @@
 <?php
+	$filename = "library.txt";
+	$opendata = unserialize(file_get_contents($filename));
+	if (empty($opendata)){
+				$opendata = array();
+			}
 	class A{
-		public $filename = "library.txt";
+		
 		public $name;
 		public $author;
 		public $pages;
@@ -8,31 +13,30 @@
 		public $library;
 		public $temp;
 
-		public function addbook(){
-			$temp['name'] = $_GET['name'];
-			$temp['author'] = $_GET['author'];
-			$temp['pages'] = $_GET['pages'];
-			$temp['description'] = $_GET['description'];
-			$library = unserialize(file_get_contents($filename));
-			$library[] = $temp;
-			file_put_contents($filename, serialize($library));
+		public function addbook($filename,$opendata){
+			
+			$this->library = $opendata;
+			$this->library[] = array('name' => $_GET['name'], 'author' => $_GET['author'],'pages' => $_GET['pages'], 'description' => $_GET['description']);
+			file_put_contents($filename, serialize($this->library));
 
 		}
 		public $data;
-		public function showbook(){
-			$data = unserialize(file_get_contents($filename));
-
-			foreach ($data as $key => $value) {
-				print_r($key);
-			}
+		public function showbook($filename){
+			$this->data = unserialize(file_get_contents($filename));
+			print_r($this->data);
+			// foreach ($this->data as $key => $value) {
+			// 	print_r($key);
+			// }
 		}
 	}
 	$objLibrary = new A();
 	if ($_GET){
 		if(!empty($_GET['name']) && !empty($_GET['author']) && !empty($_GET['pages'])&& !empty($_GET['description'])){
-			$objLibrary->addbook();
+			$objLibrary->addbook($filename,$opendata);
+
 		}
 	}
+	
 ?>
 
 <!doctype html>
@@ -91,6 +95,11 @@
 				</div>
 			</form>
 		</div>
+		<pre>
+			<?php
+	$objLibrary->showbook($filename);
+	?>
+		</pre>	
 	</div>
 </body>
 </html>
