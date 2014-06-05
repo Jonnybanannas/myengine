@@ -53,13 +53,13 @@
 		post.append('name',$('#name').val());
 		post.append('img',$('#img')[0].files[0]);
 
-		
+		console.log(post);
 		$.ajax({
    			type: "POST",
    			url: "response.php",
    			data: post,
    			processData: false,
-   			contentData: false,
+   			contentType: false,
    		}).then(function(data){
    			console.log(data);
    		})
